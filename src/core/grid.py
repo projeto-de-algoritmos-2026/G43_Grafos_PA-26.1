@@ -43,3 +43,8 @@ class Grid:
                 celula.reset()
         self.celula_inicio = None
         self.celula_fim = None
+
+    def get_cell(self, row, col):
+        if 0 <= row < self.rows and 0 <= col < self.cols:
+            return self.celulas[row][col]
+        return None    
