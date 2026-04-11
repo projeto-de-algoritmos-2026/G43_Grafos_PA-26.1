@@ -7,21 +7,20 @@ class Cell:
         self.row = row
         self.col = col
 
-        # Estado da célula
-        self.is_wall = False
-        self.is_start = False
-        self.is_end = False
-        self.is_visited = False
-        self.is_path = False
+        self.is_parede = False
+        self.is_inicio = False
+        self.is_fim = False
+        self.is_visitado = False
+        self.is_caminho = False
 
-        self.neighbors = []
+        self.vizinhos = []
 
     def get_color(self):
-        if self.is_start:   return GREEN
-        if self.is_end:     return ORANGE
-        if self.is_path:    return BLUE
-        if self.is_visited: return RED
-        if self.is_wall:    return BLACK
+        if self.is_inicio:   return GREEN
+        if self.is_fim:     return ORANGE
+        if self.is_caminho:    return BLUE
+        if self.is_visitado: return RED
+        if self.is_parede:    return BLACK
         return WHITE
 
     def draw(self, surface, cell_size):
@@ -31,13 +30,13 @@ class Cell:
         pygame.draw.rect(surface, GREY, (x, y, cell_size, cell_size), 1)
 
     def toggle_wall(self):
-        if not self.is_start and not self.is_end:
-            self.is_wall = not self.is_wall
+        if not self.is_inicio and not self.is_fim:
+            self.is_parede = not self.is_parede
 
     def reset(self):
-        self.is_wall = False
-        self.is_start = False
-        self.is_end = False
-        self.is_visited = False
-        self.is_path = False
-        self.neighbors = []
+        self.is_parede = False
+        self.is_inicio = False
+        self.is_fim = False
+        self.is_visitado = False
+        self.is_caminho = False
+        self.vizinhos = []
