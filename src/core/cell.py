@@ -1,6 +1,5 @@
 import pygame
 from settings import GREY, GREEN, ORANGE, BLUE, RED, BLACK, WHITE
-from core.cell import Cell
 
 
 class Cell:
