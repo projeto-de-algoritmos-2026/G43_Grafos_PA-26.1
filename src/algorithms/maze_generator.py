@@ -7,14 +7,14 @@ def generate_maze(grid):
     for row in grid.celulas:
         for cell in row:
             cell.is_parede = True
-            cell.is_visitada = False
+            cell.is_visitado = False
     
     start_cell = grid.get_cell(1, 1)
     if not start_cell:
         return
     
     start_cell.is_parede = False
-    start_cell.is_visitada = True
+    start_cell.is_visitado = True
     stack = [start_cell]
 
     while stack:
@@ -51,4 +51,4 @@ def generate_maze(grid):
 
     for row in grid.celulas:
         for cell in row:
-            cell.is_visitada = False
+            cell.is_visitado = False
