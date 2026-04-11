@@ -1,5 +1,7 @@
 import random
 
+from core import grid
+
 def generate_maze(grid):
     """Usa DFS (Backtracker) pulando de 2 em 2 células para gerar o labirinto."""
     for row in grid.celulas:
@@ -47,3 +49,6 @@ def generate_maze(grid):
         else:
             stack.pop()
 
+    for row in grid.celulas:
+        for cell in row:
+            cell.is_visitada = False
