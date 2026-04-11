@@ -8,6 +8,7 @@ from settings import (WIDTH, HEIGHT, FPS, BLACK,
                       DEFAULT_ROWS, DEFAULT_COLS,
                       MIN_SIZE, MAX_SIZE)
 from core.grid import Grid
+from algorithms.maze_generator import generate_maze
 
 
 def get_grid_size():
@@ -57,6 +58,9 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     grid.reset()
+                if event.key == pygame.K_g:
+                    grid.reset()
+                    generate_maze(grid)
 
         screen.fill(BLACK)
         grid.draw(screen)
