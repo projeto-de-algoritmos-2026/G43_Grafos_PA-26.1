@@ -1,5 +1,6 @@
 import pygame
 from settings import GREY, GREEN, ORANGE, BLUE, RED, BLACK, WHITE
+from core.cell import Cell
 
 
 class Cell:
@@ -41,3 +42,22 @@ class Cell:
         self.is_visited = False
         self.is_path = False
         self.neighbors = []
+
+    class Grid:
+        def __init__(self, rows, cols):
+            self.rows = rows
+            self.cols = cols
+
+            self.grid = [[Cell(r,c)for c in range(cols)] for r in range(rows)]
+            self._fill_with_walls()
+
+        def _fill_with_walls(self):
+            for row in range(self.rows):
+                for col in range(self.cols):
+                    self.grid[row][col].is_wall = True
+
+        def get_cell(self,row,col):
+            if 0 <= row < self.rows and 0 <= col < self.cols:
+                return self.grid[row][col]
+            return None
+        
