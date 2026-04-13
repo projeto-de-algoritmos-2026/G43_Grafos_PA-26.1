@@ -10,7 +10,7 @@ from settings import (WIDTH, HEIGHT, FPS, BLACK,
 from core.grid import Grid
 from algorithms.maze_generator import generate_maze
 from algorithms.dfs import dfs
-
+from algorithms.bfs import bfs
 
 def get_grid_size():
     print(f"\nTamanho do grid (entre {MIN_SIZE} e {MAX_SIZE})")
@@ -76,6 +76,11 @@ def main():
                     reset_busca(grid)
                     grid.update_vizinhos()
                     algoritmo_ativo = dfs(grid)
+
+                if event.key == pygame.K_2:
+                    reset_busca(grid)
+                    grid.update_vizinhos()
+                    algoritmo_ativo = bfs(grid)
 
         if algoritmo_ativo:
             try:
