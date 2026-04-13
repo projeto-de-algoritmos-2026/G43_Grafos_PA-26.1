@@ -44,6 +44,16 @@ class Grid:
         self.celula_inicio = None
         self.celula_fim = None
 
+    def update_vizinhos(self):
+        for linha in self.celulas:
+            for celula in linha:
+                celula.vizinhos = []
+                directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+                for dr, dc in directions:
+                    vizinho = self.get_cell(celula.row + dr, celula.col + dc)
+                    if vizinho and not vizinho.is_parede:
+                        celula.vizinhos.append(vizinho)
+
     def get_cell(self, row, col):
         if 0 <= row < self.rows and 0 <= col < self.cols:
             return self.celulas[row][col]

@@ -9,11 +9,11 @@ from settings import (WIDTH, HEIGHT, FPS, BLACK,
                       MIN_SIZE, MAX_SIZE)
 from core.grid import Grid
 from algorithms.maze_generator import generate_maze
+from algorithms.dfs import dfs
 
 
 def get_grid_size():
     print(f"\nTamanho do grid (entre {MIN_SIZE} e {MAX_SIZE})")
-
     try:
         rows = int(input(f"  Linhas  [{DEFAULT_ROWS}]: ") or DEFAULT_ROWS)
         cols = int(input(f"  Colunas [{DEFAULT_COLS}]: ") or DEFAULT_COLS)
@@ -22,8 +22,14 @@ def get_grid_size():
     except ValueError:
         print("Valor inválido. Usando tamanho padrão.")
         rows, cols = DEFAULT_ROWS, DEFAULT_COLS
-
     return rows, cols
+
+
+def reset_busca(grid):
+    for linha in grid.celulas:
+        for celula in linha:
+            celula.is_visitado = False
+            celula.is_caminho = False
 
 
 def main():
@@ -36,6 +42,7 @@ def main():
     clock = pygame.time.Clock()
 
     grid = Grid(rows, cols, cell_size)
+    algoritmo_ativo = None
 
     while True:
         clock.tick(FPS)
@@ -58,9 +65,23 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_r:
                     grid.reset()
+                    algoritmo_ativo = None
+
                 if event.key == pygame.K_g:
                     grid.reset()
                     generate_maze(grid)
+                    algoritmo_ativo = None
+
+                if event.key == pygame.K_1:
+                    reset_busca(grid)
+                    grid.update_vizinhos()
+                    algoritmo_ativo = dfs(grid)
+
+        if algoritmo_ativo:
+            try:
+                next(algoritmo_ativo)
+            except StopIteration:
+                algoritmo_ativo = None
 
         screen.fill(BLACK)
         grid.draw(screen)
