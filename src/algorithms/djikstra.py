@@ -1,6 +1,6 @@
 import heapq
 
-def dijkstra(grid, star_cell, end_cell):
+def djikstra(grid, star_cell, end_cell):
 
     distances = {cell:float('inf') for row in grid.celulas for cell in row}
     distances[star_cell] = 0 
