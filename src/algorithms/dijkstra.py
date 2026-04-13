@@ -26,10 +26,6 @@ def dijkstra(grid):
             yield from reconstruct_path(came_from, current_cell)
             return True
         
-        if current_cell != start_cell and current_cell != end_cell:
-            current_cell.is_visitada = True
-            yield
-
         for dr, dc in directions:
             neighbor = grid.get_cell(current_cell.row + dr, current_cell.col + dc)
 
@@ -44,6 +40,10 @@ def dijkstra(grid):
                     count += 1
                     heapq.heappush(priority_queue, (new_dist, count, neighbor))
 
+                    if neighbor != end_cell:
+                        neighbor.is_visitado = True
+                        yield
+
     return False
 
 def reconstruct_path(came_from, current):
@@ -55,5 +55,5 @@ def reconstruct_path(came_from, current):
     for cell in path:
         if not cell.is_inicio:
             cell.is_caminho = True
-            cell.is_visitada = False
+            cell.is_visitado = False
             yield
