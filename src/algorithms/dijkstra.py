@@ -30,7 +30,11 @@ def dijkstra(grid):
             neighbor = grid.get_cell(current_cell.row + dr, current_cell.col + dc)
 
             if neighbor and not neighbor.is_parede:
-                weight = 1
+                if neighbor.is_lama:
+                    weight = 5
+                else:
+                    weight = 1
+                    
                 new_dist = current_dist + weight
 
                 if new_dist < distances[neighbor]:

@@ -15,12 +15,18 @@ class Cell:
 
         self.vizinhos = []
 
+        self.is_lama = False
+
     def get_color(self):
         if self.is_inicio:   return GREEN
         if self.is_fim:     return ORANGE
         if self.is_caminho:    return BLUE
         if self.is_visitado: return RED
         if self.is_parede:    return BLACK
+        if self.is_lama:
+            if self.is_caminho: return (0, 0, 139)
+            if self.is_visitado: return (139,0,0)
+            return(139,69,19)
         return WHITE
 
     def draw(self, surface, cell_size):
