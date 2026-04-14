@@ -45,12 +45,14 @@ def reset_busca(grid):
 def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrido):
     visitados = 0
     tamanho_caminho = 0
+    custo_total = 0 
     for linha in grid.celulas:
         for celula in linha:
             if celula.is_visitado or celula.is_caminho:
                 visitados += 1 
             if celula.is_caminho:
                 tamanho_caminho += 1
+                custo_total += 5 if celula.is_lama else 1
 
     if tempo_decorrido < 1:
         texto_tempo = f"Tempo de Execução: {tempo_decorrido * 1000:.0f} ms"
@@ -62,6 +64,7 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrid
         f"Algoritmo: {nome_algoritmo}",
         f"Nós Explorados: {visitados}",
         f"Caminho Final: {tamanho_caminho}",
+        f"Custo total: {custo_total}",
         texto_tempo,
         "",
         "Aperte 1, 2 ou 3 para outro algoritmo",
@@ -69,7 +72,7 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrid
     ]
 
     largura_painel = 380
-    altura_painel = 270
+    altura_painel = 280
     
     x = (screen.get_width() - largura_painel) // 2
     y = (screen.get_height() - altura_painel) // 2
@@ -80,7 +83,7 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrid
     pos_y_atual = y + 20 
 
     for i, texto in enumerate(textos):
-        if i >= 6:
+        if i >= 7:
             cor_texto = (255, 215, 0)
         else:
             cor_texto = (255, 255, 255) 
@@ -90,7 +93,7 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrid
         
         screen.blit(imagem_texto, (texto_x, pos_y_atual))
        
-        if i == 4:
+        if i == 5:
             pos_y_atual += 15
         else:
             pos_y_atual += 30
