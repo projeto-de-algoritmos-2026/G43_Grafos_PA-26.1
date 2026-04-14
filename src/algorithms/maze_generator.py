@@ -49,6 +49,16 @@ def generate_maze(grid):
         else:
             stack.pop()
 
+    """randomizador para criar ciclos"""
+    chance_ciclo = 0.15
+    for r in range(1, grid.rows -1):
+        for c in range(1, grid.cols - 1):
+            cell = grid.get_cell(r,c)
+            if cell.is_parede:
+                if random.random() < chance_ciclo:
+                    cell.is_parede = False
+
+
     for row in grid.celulas:
         for cell in row:
             cell.is_visitado = False
