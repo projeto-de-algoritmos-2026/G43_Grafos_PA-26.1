@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -32,7 +33,7 @@ def reset_busca(grid):
             celula.is_visitado = False
             celula.is_caminho = False
 
-def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte):
+def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrido):
     visitados = 0
     tamanho_caminho = 0
     for linha in grid.celulas:
@@ -42,18 +43,24 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte):
             if celula.is_caminho:
                 tamanho_caminho += 1
 
+    if tempo_decorrido < 1:
+        texto_tempo = f"Tempo de Execução: {tempo_decorrido * 1000:.0f} ms"
+    else:
+        texto_tempo = f"Tempo de Execução: {tempo_decorrido:.2f} s"
+
     textos = [
         "--- RESULTADOS ---",
         f"Algoritmo: {nome_algoritmo}",
         f"Nós Explorados: {visitados}",
         f"Caminho Final: {tamanho_caminho}",
+        texto_tempo,
         "",
         "Aperte 1, 2 ou 3 para outro algoritmo",
         "Aperte 'G' para um novo labirinto"
     ]
 
-    largura_painel = 360
-    altura_painel = 240
+    largura_painel = 380
+    altura_painel = 270
     
     x = (screen.get_width() - largura_painel) // 2
     y = (screen.get_height() - altura_painel) // 2
@@ -61,19 +68,23 @@ def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte):
     pygame.draw.rect(screen, (30, 30, 30), (x, y, largura_painel, altura_painel))
     pygame.draw.rect(screen, (255, 215, 0), (x, y, largura_painel, altura_painel), 3)
 
+    pos_y_atual = y + 20 
+
     for i, texto in enumerate(textos):
-        if i >= 5:
-            cor_texto = (255, 215, 0) # Amarelo
+        if i >= 6:
+            cor_texto = (255, 215, 0)
         else:
-            cor_texto = (255, 255, 255) # Branco
+            cor_texto = (255, 255, 255) 
             
         imagem_texto = fonte.render(texto, True, cor_texto)
         texto_x = x + (largura_painel - imagem_texto.get_width()) // 2
         
-        espacamento = 30 if i < 4 else (25 if i == 4 else 25)
-        texto_y = y + 15 + (i * espacamento)
-        
-        screen.blit(imagem_texto, (texto_x, texto_y))
+        screen.blit(imagem_texto, (texto_x, pos_y_atual))
+       
+        if i == 4:
+            pos_y_atual += 15
+        else:
+            pos_y_atual += 30
 
 
 def main():
@@ -92,6 +103,8 @@ def main():
     algoritmo_ativo = None
     nome_algoritmo = ""
     busca_concluida = False
+    tempo_inicio = 0
+    tempo = 0
 
     while True:
         clock.tick(FPS)
@@ -129,6 +142,7 @@ def main():
                     algoritmo_ativo = dfs(grid)
                     nome_algoritmo = "DFS"
                     busca_concluida = False
+                    tempo_inicio = time.time()
 
                 if event.key == pygame.K_2:
                     reset_busca(grid)
@@ -136,6 +150,7 @@ def main():
                     algoritmo_ativo = bfs(grid)
                     nome_algoritmo = "BFS"
                     busca_concluida = False
+                    tempo_inicio = time.time()
 
                 if event.key == pygame.K_3:
                     reset_busca(grid)
@@ -143,6 +158,7 @@ def main():
                     algoritmo_ativo = dijkstra(grid)
                     nome_algoritmo = "Dijkstra"
                     busca_concluida = False
+                    tempo_inicio = time.time()
 
         if algoritmo_ativo:
             try:
@@ -150,11 +166,12 @@ def main():
             except StopIteration:
                 algoritmo_ativo = None
                 busca_concluida = True
+                tempo = time.time() - tempo_inicio
 
         screen.fill(BLACK)
         grid.draw(screen)
         if busca_concluida:
-            desenhar_painel_metricas(screen, grid, nome_algoritmo, FONTE_METRICAS)
+            desenhar_painel_metricas(screen, grid, nome_algoritmo, FONTE_METRICAS, tempo)
         pygame.display.flip()
 
 
