@@ -2,6 +2,7 @@ import pygame
 import sys
 import os
 import time
+import random
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -26,12 +27,20 @@ def get_grid_size():
         rows, cols = DEFAULT_ROWS, DEFAULT_COLS
     return rows, cols
 
+def espalhar_lama(grid,probabilidade = 0.25):
+    for linha in grid.celulas:
+        for celula in linha:
+            if not celula.is_parede and not celula.is_inicio and not celula.is_fim:
+                if random.random() < probabilidade:
+                    celula.is_lama = True
+
 
 def reset_busca(grid):
     for linha in grid.celulas:
         for celula in linha:
             celula.is_visitado = False
             celula.is_caminho = False
+            
 
 def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrido):
     visitados = 0
@@ -135,6 +144,10 @@ def main():
                     generate_maze(grid)
                     algoritmo_ativo = None
                     busca_concluida = False
+                
+                if event.key == pygame.K_l:
+                    reset_busca(grid)
+                    espalhar_lama(grid, probabilidade=0.25)
 
                 if event.key == pygame.K_1:
                     reset_busca(grid)

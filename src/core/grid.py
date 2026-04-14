@@ -41,8 +41,10 @@ class Grid:
         for linha in self.celulas:
             for celula in linha:
                 celula.reset()
+                celula.is_lama = False
         self.celula_inicio = None
         self.celula_fim = None
+
 
     def update_vizinhos(self):
         for linha in self.celulas:
