@@ -27,7 +27,7 @@ def get_grid_size():
         rows, cols = DEFAULT_ROWS, DEFAULT_COLS
     return rows, cols
 
-def espalhar_lama(grid,probabilidade = 0.25):
+def espalhar_lama(grid,probabilidade = 0.1):
     for linha in grid.celulas:
         for celula in linha:
             if not celula.is_parede and not celula.is_inicio and not celula.is_fim:
@@ -150,7 +150,7 @@ def main():
                 
                 if event.key == pygame.K_l:
                     reset_busca(grid)
-                    espalhar_lama(grid, probabilidade=0.25)
+                    espalhar_lama(grid, probabilidade=0.1)
 
                 if event.key == pygame.K_1:
                     reset_busca(grid)
