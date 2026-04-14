@@ -1,6 +1,7 @@
 import pygame
 import sys
 import os
+import time
 
 sys.path.insert(0, os.path.dirname(__file__))
 
@@ -32,18 +33,78 @@ def reset_busca(grid):
             celula.is_visitado = False
             celula.is_caminho = False
 
+def desenhar_painel_metricas(screen, grid, nome_algoritmo, fonte, tempo_decorrido):
+    visitados = 0
+    tamanho_caminho = 0
+    for linha in grid.celulas:
+        for celula in linha:
+            if celula.is_visitado or celula.is_caminho:
+                visitados += 1 
+            if celula.is_caminho:
+                tamanho_caminho += 1
+
+    if tempo_decorrido < 1:
+        texto_tempo = f"Tempo de Execução: {tempo_decorrido * 1000:.0f} ms"
+    else:
+        texto_tempo = f"Tempo de Execução: {tempo_decorrido:.2f} s"
+
+    textos = [
+        "--- RESULTADOS ---",
+        f"Algoritmo: {nome_algoritmo}",
+        f"Nós Explorados: {visitados}",
+        f"Caminho Final: {tamanho_caminho}",
+        texto_tempo,
+        "",
+        "Aperte 1, 2 ou 3 para outro algoritmo",
+        "Aperte 'G' para um novo labirinto"
+    ]
+
+    largura_painel = 380
+    altura_painel = 270
+    
+    x = (screen.get_width() - largura_painel) // 2
+    y = (screen.get_height() - altura_painel) // 2
+
+    pygame.draw.rect(screen, (30, 30, 30), (x, y, largura_painel, altura_painel))
+    pygame.draw.rect(screen, (255, 215, 0), (x, y, largura_painel, altura_painel), 3)
+
+    pos_y_atual = y + 20 
+
+    for i, texto in enumerate(textos):
+        if i >= 6:
+            cor_texto = (255, 215, 0)
+        else:
+            cor_texto = (255, 255, 255) 
+            
+        imagem_texto = fonte.render(texto, True, cor_texto)
+        texto_x = x + (largura_painel - imagem_texto.get_width()) // 2
+        
+        screen.blit(imagem_texto, (texto_x, pos_y_atual))
+       
+        if i == 4:
+            pos_y_atual += 15
+        else:
+            pos_y_atual += 30
+
 
 def main():
     rows, cols = get_grid_size()
     cell_size = WIDTH // cols
 
     pygame.init()
+    pygame.font.init()
+    FONTE_METRICAS = pygame.font.SysFont("Arial",20, bold = True)
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
     pygame.display.set_caption("Maze Solver")
     clock = pygame.time.Clock()
 
     grid = Grid(rows, cols, cell_size)
     algoritmo_ativo = None
+    nome_algoritmo = ""
+    busca_concluida = False
+    tempo_inicio = 0
+    tempo = 0
 
     while True:
         clock.tick(FPS)
@@ -67,35 +128,50 @@ def main():
                 if event.key == pygame.K_r:
                     grid.reset()
                     algoritmo_ativo = None
+                    busca_concluida = False
 
                 if event.key == pygame.K_g:
                     grid.reset()
                     generate_maze(grid)
                     algoritmo_ativo = None
+                    busca_concluida = False
 
                 if event.key == pygame.K_1:
                     reset_busca(grid)
                     grid.update_vizinhos()
                     algoritmo_ativo = dfs(grid)
+                    nome_algoritmo = "DFS"
+                    busca_concluida = False
+                    tempo_inicio = time.time()
 
                 if event.key == pygame.K_2:
                     reset_busca(grid)
                     grid.update_vizinhos()
                     algoritmo_ativo = bfs(grid)
+                    nome_algoritmo = "BFS"
+                    busca_concluida = False
+                    tempo_inicio = time.time()
 
                 if event.key == pygame.K_3:
                     reset_busca(grid)
                     grid.update_vizinhos()
                     algoritmo_ativo = dijkstra(grid)
+                    nome_algoritmo = "Dijkstra"
+                    busca_concluida = False
+                    tempo_inicio = time.time()
 
         if algoritmo_ativo:
             try:
                 next(algoritmo_ativo)
             except StopIteration:
                 algoritmo_ativo = None
+                busca_concluida = True
+                tempo = time.time() - tempo_inicio
 
         screen.fill(BLACK)
         grid.draw(screen)
+        if busca_concluida:
+            desenhar_painel_metricas(screen, grid, nome_algoritmo, FONTE_METRICAS, tempo)
         pygame.display.flip()
 
 
