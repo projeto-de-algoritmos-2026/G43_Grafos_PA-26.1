@@ -115,7 +115,25 @@ Tamanho do grid (entre 5 e 50)
 | **3** | Executar Dijkstra |
 
 ---
+## 🎥 Demonstração
 
+### Vídeo Explicativo
+[🔗 Assista ao vídeo completo explicando o projeto e algoritmos](https://www.youtube.com/watch?v=trGtt7kMrqE)
+
+### Screenshots do Funcionamento
+
+#### 3. Execução do DFS
+![Execução DFS](img/dfs.png)
+#### 3. Execução do BFS
+![Execução BFS](img/BFS.png)
+
+#### 4. Comparação de Algoritmos
+![](img/BFS-Dijkstra.png)
+![](img/DFS-Dijkstra.png)
+![](img/dijkstra.png)
+
+
+---
 ## Estrutura do Projeto
 
 ```
